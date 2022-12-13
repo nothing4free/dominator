@@ -184,7 +184,6 @@ def main():
         hostname = sys.argv[1]
         get_dns_records(hostname)
     except Exception as e:
-        # if no argument is passed, set the hostname to the local hostname
         # print error traceback
         traceback.print_exc()
         print(" [!] Error: " + str(e))
