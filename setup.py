@@ -18,7 +18,7 @@ def new_screen():
 def install_dependencies():
     print(" [i] Installing dependencies...")
     try:
-        os.system("pip install requirements.txt")
+        os.system("pip install -r requirements.txt")
     except:
         print(" [!] Could not install dependencies. Dominator might not work as expected.")
 
