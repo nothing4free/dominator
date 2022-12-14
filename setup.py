@@ -1,6 +1,9 @@
 import os
 import pwd
 
+os.system("pip install python_crontab==2.6.0")
+from crontab import CronTab
+
 username = pwd.getpwuid(os.getuid())[0]
 directory = os.getcwd()
 
@@ -24,7 +27,6 @@ def install_dependencies():
 
 def set_cron():
     try:
-        from crontab import CronTab
         cron = CronTab(user=username)
         job = cron.new(command='python3 {}/exec.py'.format(directory))
         

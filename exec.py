@@ -9,4 +9,4 @@ c.execute(
 targets = c.fetchall()
 
 for target in targets:
-    os.system("python3 engine.py {}".format(target))
+    os.system("python3 engine.py {}".format(target[0]))
