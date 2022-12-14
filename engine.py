@@ -8,7 +8,7 @@ import traceback
 
 """
     This script will resolve a hostname to an IP address and print it to the screen.
-    If no hostname is specified, the script will uexit.
+    If no hostname is specified, the script will exit.
 
     This script saves the daily data on a sqlite3 database with the following structure:
     - DNS entry type (A, MX, CNAME, etc)
@@ -57,25 +57,28 @@ def get_dns_records(hostname):
 
     try:
         a_result = dns.resolver.resolve(hostname, 'A')
-        a_records = []
+        a_records = ""
         for rdata in a_result:
-            a_records.append(rdata.address)
+            a_records = a_records + " " + rdata.address
     except:
+        traceback.print_exc()
         a_records = ""
     
     try:
         aaaa_result= dns.resolver.resolve(hostname, 'AAAA')
-        aaaa_records = []
+        aaaa_records = ""
         for rdata in aaaa_result:
-            aaaa_records.append(rdata.address)
+            aaaa_records = aaaa_records + " " + rdata.address
+            #aaaa_records.append(rdata.address)
     except:
         aaaa_records = ""
     
     try:
         cname_result = dns.resolver.resolve(hostname, 'CNAME')
-        cname_records = []
+        cname_records = ""
         for rdata in cname_result:
-            cname_records.append(rdata.target.to_text())
+            cname_records = cname_records + " " + rdata.target.to_text()
+            # cname_records.append(rdata.target.to_text())
     except:
         # print stack trace
         #traceback.print_exc()
@@ -83,17 +86,19 @@ def get_dns_records(hostname):
     
     try:
         mx_result = dns.resolver.resolve(hostname, 'MX')
-        mx_records = []
+        mx_records = ""
         for rdata in mx_result:
-            mx_records.append(rdata.exchange.to_text())
+            mx_records = mx_records + " " + rdata.exchange.to_text()
+            #mx_records.append(rdata.exchange.to_text())
     except:
         mx_records = ""
     
     try:
         ns_result = dns.resolver.resolve(hostname, 'NS')
-        ns_records = []
+        ns_records = ""
         for rdata in ns_result:
-            ns_records.append(rdata.target.to_text())
+            ns_records = ns_records + " " + rdata.target.to_text()
+            #ns_records.append(rdata.target.to_text())
     except:
         ns_records = ""
     
@@ -102,21 +107,23 @@ def get_dns_records(hostname):
         txt_records_pre = []
         for rdata in txt_result:
             txt_records_pre.append(rdata.strings)
-        txt_records = []
+        txt_records = ""
         # remove the b' from the strings in the tuple
         for x in txt_records_pre:
             for y in x:
                 y = y.decode("utf-8")
-                txt_records.append(y)
+                txt_records = txt_records + " " + y
+                #txt_records.append(y)
 
     except:
         txt_records = ""
     
     try:
         soa_result = dns.resolver.resolve(hostname, 'SOA')
-        soa_records = []
+        soa_records = ""
         for x in soa_result:
-            soa_records.append(x.to_text())
+            soa_records = soa_records + " " + x.to_text()
+            #soa_records.append(x.to_text())
     except:
         # print stack trace
         traceback.print_exc()
@@ -124,23 +131,25 @@ def get_dns_records(hostname):
     
     try:
         ptr_result = dns.resolver.resolve(hostname, 'PTR')
-        ptr_records = []
+        ptr_records = ""
         for rdata in ptr_result:
-            ptr_records.append(rdata.target.to_text())
+            ptr_records = ptr_records + " " + rdata.target.to_text()
+            #ptr_records.append(rdata.target.to_text())
     except:
         ptr_records = ""
     
     try:
         srv_result = dns.resolver.resolve(hostname, 'SRV')
-        srv_records = []
+        srv_records = ""
         for rdata in srv_result:
-            srv_records.append(rdata.target)
+            srv_records = srv_records + " " + rdata.target
+            #srv_records.append(rdata.target)
     except:
         srv_records = ""
 
     redirect = check_for_redirects(hostname)
 
-    """conn = sqlite3.connect('./databases/intel.db')
+    conn = sqlite3.connect('./databases/intel.db')
     c = conn.cursor()
     c.execute(
         "INSERT INTO dns_records(scan_date, target, a, aaaa, cname, mx, ns, txt, soa, ptr, srv, redirect) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)", 
@@ -159,7 +168,7 @@ def get_dns_records(hostname):
     )
     
     conn.commit()
-    conn.close()"""
+    conn.close()
 
     print(" [+] Scan date: " + scan_date)
     print(" [+] Target: " + hostname)
@@ -173,7 +182,6 @@ def get_dns_records(hostname):
     print(" [+] PTR records: " + str(ptr_records))
     print(" [+] SRV records: " + str(srv_records))
     print(" [+] Redirect: " + redirect)
-    print(       )
     print(str(txt_records)) # a way to save this thing
 
 

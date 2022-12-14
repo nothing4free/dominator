@@ -17,6 +17,7 @@
 from simple_term_menu import TerminalMenu
 import sqlite3
 import os
+import time
 
 def new_screen():
     os.system("clear")
@@ -113,6 +114,8 @@ def list_targets_and_records():
             print(" [i] Redirect: " + str(record[12]))
             print("───────────────────────────────────────────────────────────────────────────────────────────────────────────────")
             print("")
+        
+        time.sleep(10)
 
         conn.close()
     except:
