@@ -35,4 +35,5 @@ The tool is designed in a way that the ```engine.py``` and ```exec.py``` files a
 
 ```python3 engine.py <domain.tld>```
 
-## 
+## Is this a final release?
+By no means this is a final release. I'm currently working on the more functionalities for this tool, such as website monitoring and custom email alerts... but that's coming out later ;)
