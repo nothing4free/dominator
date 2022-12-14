@@ -1,4 +1,3 @@
-from crontab import CronTab
 import os
 import pwd
 
@@ -25,6 +24,7 @@ def install_dependencies():
 
 def set_cron():
     try:
+        from crontab import CronTab
         cron = CronTab(user=username)
         job = cron.new(command='python3 {}/exec.py'.format(directory))
         
